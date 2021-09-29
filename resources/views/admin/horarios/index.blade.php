@@ -40,8 +40,8 @@
                                     <td>
                                         <div class="mail-actions">
                                             <a href="{{ route('clinicas.show', $clinica->id) }}" class="btn btn-secondary"><i class="far fa-eye"></i></a>
-                                            <a href="{{ route('clinicas.edit', $clinica->id) }}" class="btn btn-info"><i class="far fa-edit"></i></a>
-                                            <a href="{{ route('horarios.create', $clinica->id) }}" class="btn btn-warning"><i class="far fa-calendar"></i></a>
+                                            <a href="{{ route('clinicas.create', $clinica->id) }}" class="btn btn-info"><i class="far fa-edit"></i></a>
+                                            <a href="{{ route('horarios.index', $clinica->id) }}" class="btn btn-warning"><i class="far fa-calendar"></i></a>
                                             <button type="button" class="btn btn-danger delete" data-url="{{ route('clinicas.destroy', $clinica->id) }}" data-table="clinicas"><i class="far fa-trash-alt"></i></button>
                                         </div>
                                     </td>

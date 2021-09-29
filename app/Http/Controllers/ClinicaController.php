@@ -62,7 +62,7 @@ class ClinicaController extends Controller
      */
     public function show($id)
     {
-        $clinica = Clinica::with('user')->findOrFail($id);
+        $clinica = Clinica::with(['user', 'horarios'])->findOrFail($id);
 
         return view('admin.clinicas.show', compact('clinica'));
     }

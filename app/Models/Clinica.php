@@ -19,4 +19,9 @@ class Clinica extends Model
     {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
+
+    public function horarios()
+    {
+        return $this->hasMany(Horario::class);
+    }
 }

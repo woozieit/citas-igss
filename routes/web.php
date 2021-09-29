@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClinicaController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,11 @@ Route::middleware('auth')->group( function () {
     Route::resource('usuarios', UserController::class);
 
     Route::resource('clinicas', ClinicaController::class);
+
+    Route::get('horarios/{id}/create', [HorarioController::class, 'create'])->name('horarios.create');
+    Route::post('horarios', [HorarioController::class, 'store'])->name('horarios.store');
+    Route::delete('horarios/{id}/destroy', [HorarioController::class, 'destroy'])->name('horarios.destroy');
+
 
 });
 

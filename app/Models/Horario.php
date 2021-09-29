@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Horario extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'fecha_inicio',
+        'fecha_fin',
+        'clinica_id'
+    ];
 }

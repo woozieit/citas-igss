@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Horario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class HorarioController extends Controller
 {
@@ -13,7 +15,8 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        //
+
+
     }
 
     /**
@@ -21,9 +24,9 @@ class HorarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return view('admin.horarios.create', compact('id'));
     }
 
     /**
@@ -34,7 +37,18 @@ class HorarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'clinica_id' => 'required'
+        ]);
+
+        $input = $request->all();
+
+        $horario = new Horario;
+        $horario->fill( $input )->save();
+
+        return Redirect::route('clinicas.show', $request->clinica_id)->withSuccess('El horario fue agregado correctamente');
     }
 
     /**
@@ -79,6 +93,14 @@ class HorarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $horario = Horario::find($id);
+
+        if ( $horario->estado ) {
+            return response()->json(['authorize' => 'No se puede eliminar porque tiene una cita activa.']);
+        } else {
+            $horario->delete();
+
+            return response()->json(['success' => 'Registro eliminado con éxito.']);
+        }
     }
 }
