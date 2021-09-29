@@ -4,17 +4,22 @@
 <div class="page-info">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Lista</li>
+            <li class="breadcrumb-item"><a href="{{ route('usuarios.index') }}">Usuarios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ver</li>
         </ol>
     </nav>
+
+    <div class="page-options">
+        <a href="{{ route('usuarios.create') }}" class="btn btn-primary">Nuevo Registro</a>
+    </div>
+
 </div>
 <div class="main-wrapper">
     <div class="row">
         <div class="col-xl">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Lista de usuarios</h5>
+                    <h5 class="card-title">Lista de usuario</h5>
 
                     <table class="table">
                         <thead>
