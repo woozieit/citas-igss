@@ -4,6 +4,7 @@
 <meta name="description" content="Citas IGSS">
 <meta name="keywords" content="citas,clinicas">
 <meta name="author" content="Josue Carrillo">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <!-- Title -->
@@ -15,6 +16,7 @@
 <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
 <link href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/plugins/font-awesome/css/all.min.css') }}" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" >
 
 
 <!-- Theme Styles -->
