@@ -21,5 +21,13 @@ class UsersTableSeeder extends Seeder
             'rol' => User::ADMIN,
             'password' => bcrypt(123456)
         ]);
+
+        User::create([
+            'nombres_apellidos' => 'Afiliado 1',
+            'dpi' => '0000000000001',
+            'correo' => 'afiliado@gmail.com',
+            'rol' => User::AFILIADO,
+            'password' => bcrypt(123456)
+        ]);
     }
 }

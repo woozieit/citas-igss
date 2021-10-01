@@ -10,8 +10,19 @@ class Horario extends Model
     use HasFactory;
 
     protected $fillable = [
-        'fecha_inicio',
-        'fecha_fin',
-        'clinica_id'
+        'clinica_id',
+        'dia_semana',
+        'estado',
+
+        'manana_inicio',
+        'manana_fin',
+
+        'tarde_inicio',
+        'tarde_fin',
     ];
+
+    public function clinica()
+    {
+        return $this->belongsTo(Clinica::class);
+    }
 }

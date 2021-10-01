@@ -4,8 +4,8 @@
 <div class="page-info">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('usuarios.index') }}">Usuarios</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Ver</li>
+            <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Lista</li>
         </ol>
     </nav>
 

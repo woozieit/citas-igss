@@ -16,9 +16,14 @@ class CreateHorariosTable extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('clinica_id')->constrained('clinicas');
-            $table->dateTime('fecha_inicio');
-            $table->dateTime('fecha_fin');
+            $table->unsignedSmallInteger('dia_semana');
             $table->boolean('estado')->default(false);
+
+            $table->time('manana_inicio');
+            $table->time('manana_fin');
+
+            $table->time('tarde_inicio');
+            $table->time('tarde_fin');
             $table->timestamps();
         });
     }

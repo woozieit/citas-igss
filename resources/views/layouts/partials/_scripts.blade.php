@@ -12,10 +12,10 @@
 <script src="{{ asset('assets/plugins/flot/jquery.flot.symbol.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/flot/jquery.flot.resize.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/flot/jquery.flot.tooltip.min.js') }}"></script> --}}
-<script src="{{ asset('assets/js/connect.min.js') }}"></script>
-{{-- <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script> --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="{{ asset('assets/js/connect.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script> --}}
 
 
 <script>

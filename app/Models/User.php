@@ -40,5 +40,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function scopeAfiliados( $query )
+    {
+        return $query->where('rol', 'Afiliado')->where('acreditacion', true);
+    }
+
 
 }

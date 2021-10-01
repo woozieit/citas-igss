@@ -16,8 +16,12 @@ class CreateCitasTable extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('afiliado_id')->constrained('users');
-            $table->foreignId('horario_id')->constrained('horarios');
+            $table->foreignId('clinica_id')->constrained('clinicas');
             $table->foreignId('created_by')->constrained('users');
+
+            $table->date('fecha_cita');
+            $table->time('hora_cita');
+
             $table->timestamps();
         });
     }

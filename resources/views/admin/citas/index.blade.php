@@ -5,53 +5,21 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Citas</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            <li class="breadcrumb-item active" aria-current="page">Lista</li>
         </ol>
     </nav>
-</div>
-<div class="main-wrapper">
-    <div class="row stats-row">
-        @if ( $role === 'Admin' )
-            <div class="col-lg-4 col-md-12">
-                <div class="card stats-card">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <h5 class="card-title">{{ $cardCitas }}</h5>
-                            <p class="stats-text">Citas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4 col-md-12">
-                <div class="card stats-card">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <h5 class="card-title">{{ $cardClinicas }}</h5>
-                            <p class="stats-text">Clínicas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-12">
-                <div class="card stats-card">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <h5 class="card-title">{{ $cardAfiliados }}</h5>
-                            <p class="stats-text">Afiliados</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+    <div class="page-options">
+        <a href="{{ route('citas.create') }}" class="btn btn-primary">Nuevo Registro</a>
     </div>
 
-    <div class="row mt-5">
+</div>
+<div class="main-wrapper">
+    <div class="row">
         <div class="col-xl">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Próximas citas</h5>
+                    <h5 class="card-title">Lista de citas</h5>
 
                     <table class="table align-items-center">
                         <thead>
@@ -64,6 +32,7 @@
                                 @if ( $role === 'Admin' )
                                     <th scope="col">Creado Por</th>
                                 @endif
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +46,13 @@
                                     @if ( $role === 'Admin' )
                                         <td>{{ $cita->user->nombres_apellidos }}</td>
                                     @endif
+                                    <td>
+                                        <div class="mail-actions">
+                                            @if ( $role === 'Admin' )
+                                                <button type="button" class="btn btn-danger delete" data-url="{{ route('citas.destroy', $cita->id) }}" data-table="citas"><i class="far fa-trash-alt"></i></button>
+                                            @endif
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -86,6 +62,20 @@
             </div>
         </div>
     </div>
-
 </div>
+@endsection
+
+@section('js')
+
+    <script>
+
+        $('.delete').on('click', function() {
+            let table = $(this).data('table');
+            let url = $(this).data('url');
+            sweetalert2(table, url, 1)
+        });
+
+
+    </script>
+
 @endsection

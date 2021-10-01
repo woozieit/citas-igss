@@ -14,7 +14,7 @@
         <div class="col-xl">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Nuevo Horario</h5>
+                    <h5 class="card-title">Gestionar Horario</h5>
 
                     <form action="{{ route('horarios.store') }}" method="POST">
 
@@ -22,42 +22,147 @@
 
                         <input type="hidden" name="clinica_id" value="{{ $id }}">
 
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Fecha Inicio</label>
-                                <input
-                                    type="datetime-local"
-                                    class="form-control {{ $errors->has('fecha_inicio') ? 'is-invalid' : '' }}"
-                                    name="fecha_inicio"
-                                    value="{{ old('fecha_inicio') ?? old('fecha_inicio') }}"
-                                    required
-                                >
-
-                                @if ($errors->has('fecha_inicio'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('fecha_inicio') }}
-                                    </div>
-                                @endif
+                        @if (session('errors'))
+                            <div class="alert alert-danger" role="alert">
+                                Los cambios se han guardado pero tener en cuenta que:
+                                <ul>
+                                    @foreach (session('errors') as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
+                        @endif
 
-                            <div class="form-group col-md-6">
-                                <label>Fecha Fin</label>
-                                <input
-                                    type="datetime-local"
-                                    class="form-control {{ $errors->has('fecha_fin') ? 'is-invalid' : '' }}"
-                                    name="fecha_fin"
-                                    value="{{ old('fecha_fin') ?? old('fecha_fin') }}"
-                                    required
-                                >
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead_light">
+                                    <tr>
+                                        <th scope="col">Día</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Turno Mañana</th>
+                                        <th scope="col">Turno Tarde</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $horarios as $key => $horario)
+                                        <tr>
+                                            <td>{{ $dias[$key] }}</td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="estado[]"
+                                                        class="custom-control-input"
+                                                        value="{{ $key }}"
+                                                        @if( $horario->estado ) checked @endif
+                                                        id="customSwitch{{ $key }}"
+                                                    >
+                                                    <label class="custom-control-label" for="customSwitch{{ $key }}"></label>
+                                                </div>
+                                            </td>
 
-                                @if ($errors->has('fecha_fin'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('fecha_fin') }}
-                                    </div>
-                                @endif
-                            </div>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select name="manana_inicio[]" class="form-control custom-select">
+                                                            @for ($i = 7; $i <= 12; $i++)
+                                                                <option
+                                                                    value="{{ ($i < 10 ? '0': '') . $i }}:00"
+                                                                    @if( $i . ':00 AM' == $horario->manana_inicio || $i . ':00 PM' == $horario->manana_inicio ) selected @endif
+                                                                >
+                                                                    {{ $i }}:00 @if( $i == 12 ) PM  @else AM @endif
+                                                                </option>
+
+                                                                @if ( ($i . ':30') != '12:30' )
+                                                                    <option
+                                                                        value="{{ ( $i < 10 ? '0' : '' ) . $i }}:30"
+                                                                        @if( $i . ':30 AM' == $horario->manana_inicio || $i . ':30 PM' == $horario->manana_inicio ) selected @endif
+                                                                    >
+                                                                        {{ $i }}:30 @if( $i == 12 ) PM  @else AM @endif
+                                                                    </option>
+                                                                @endif
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <select name="manana_fin[]" class="form-control custom-select">
+                                                            @for ($i = 7; $i <= 12; $i++)
+                                                                <option
+                                                                    value="{{ ($i < 10 ? '0': '') . $i }}:00"
+                                                                    @if( $i . ':00 AM' == $horario->manana_fin || $i . ':00 PM' == $horario->manana_fin ) selected @endif
+                                                                >
+                                                                    {{ $i }}:00 @if( $i == 12 ) PM  @else AM @endif
+                                                                </option>
+
+                                                                @if ( ($i . ':30') != '12:30' )
+                                                                    <option
+                                                                        value="{{ ( $i < 10 ? '0' : '' ) . $i }}:30"
+                                                                        @if( $i. ':30 AM' == $horario->manana_fin || $i . ':30 PM' == $horario->manana_fin ) selected @endif
+                                                                    >
+                                                                        {{ $i }}:30 @if( $i == 12 ) PM  @else AM @endif
+                                                                    </option>
+                                                                @endif
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select name="tarde_inicio[]" class="form-control custom-select">
+                                                            @for ($i = 1; $i <= 3; $i++)
+                                                                <option
+                                                                    value="{{ $i + 12 }}:00"
+                                                                    @if( $i . ':00 PM' == $horario->tarde_inicio ) selected @endif
+                                                                >
+                                                                    {{ $i }}:00 PM
+                                                                </option>
+
+                                                                @if ( ($i . ':30') != '3:30' )
+                                                                    <option
+                                                                        value="{{ $i + 12 }}:30"
+                                                                        @if( $i . ':30 PM' == $horario->tarde_inicio ) selected @endif
+                                                                    >
+                                                                        {{ $i }}:30 PM
+                                                                    </option>
+                                                                @endif
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <select name="tarde_fin[]" class="form-control custom-select">
+                                                            @for ($i = 1; $i <= 3; $i++)
+                                                                <option
+                                                                    value="{{ $i + 12 }}:00"
+                                                                    @if( $i . ':00 PM' == $horario->tarde_fin ) selected @endif
+                                                                >
+                                                                    {{ $i }}:00 PM
+                                                                </option>
+
+                                                                @if ( ($i . ':30') != '3:30' )
+                                                                    <option
+                                                                        value="{{ $i + 12 }}:30"
+                                                                        @if( $i . ':30 PM' == $horario->tarde_fin ) selected @endif
+                                                                    >
+                                                                        {{ $i }}:30 PM
+                                                                    </option>
+                                                                @endif
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-
 
                         <div class="mt-5">
                             <button type="submit" class="btn btn-primary">Registrar</button>
