@@ -149,16 +149,11 @@ class CitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, ScheduleServiceInterface $scheduleService)
+    public function edit($id)
     {
-        $cita = Cita::findOrFail($id);
-        $afiliados = User::Afiliados()->get();
-        $clinicas = Clinica::where('estado', true)->get();
-        $role = auth()->user()->rol;
+        $cita = Cita::find($id)->delete();
 
-        $intervals = $scheduleService->getAvailableIntervals( $cita->fecha_cita, $cita->clinica_id );
-
-        return view('admin.citas.edit', compact('afiliados', 'clinicas', 'role', 'intervals', 'cita'));
+        return Redirect::route('citas.create');
     }
 
     /**
