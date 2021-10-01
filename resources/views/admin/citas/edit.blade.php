@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('citas.index') }}">Citas</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Crear</li>
+            <li class="breadcrumb-item active" aria-current="page">Editar</li>
         </ol>
     </nav>
 </div>
@@ -14,7 +14,7 @@
         <div class="col-xl">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Nueva cita</h5>
+                    <h5 class="card-title">Editar cita</h5>
 
                     @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
@@ -26,9 +26,10 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('citas.store') }}" method="POST">
+                    <form action="{{ route('citas.update', $cita->id) }}" method="POST">
 
                         @csrf
+                        @method('PUT')
 
                         @if( $role == 'Admin' )
                             <div class="form-group">
@@ -42,7 +43,7 @@
                                     @foreach ($afiliados as $afiliado)
                                         <option
                                             value="{{ $afiliado->id }}"
-                                            @if( old('afiliado_id') == $afiliado->id)  selected @endif
+                                            @if( old('afiliado_id') == $afiliado->id)  selected @elseif( $cita->afiliado_id == $afiliado->id ) selected @endif
                                         >{{ $afiliado->nombres_apellidos . ' - ' . $afiliado->dpi }}</option>
                                     @endforeach
                                 </select>
@@ -60,7 +61,10 @@
                             <select class="form-control select2" id="clinica_id" name="clinica_id">
                                 <option selected disabled>--Seleccione--</option>
                                 @foreach ($clinicas as $clinica)
-                                    <option value="{{ $clinica->id }}">{{ $clinica->nombre }}</option>
+                                    <option
+                                        value="{{ $clinica->id }}"
+                                        @if( $cita->clinica_id == $clinica->id)  selected @endif
+                                    >{{ $clinica->nombre }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -77,7 +81,7 @@
                                     id="date"
                                     name="fecha_cita"
                                     type="text"
-                                    value="{{ old('scheduled_date', date('Y-m-d')) }}"
+                                    value="{{ $cita->fecha_cita }}"
                                     data-date-format="yyyy-mm-dd"
                                     data-date-start-date="{{ date('Y-m-d') }}"
                                     data-date-end-date="+30d">
@@ -91,14 +95,26 @@
 
                                     @foreach ($intervals['manana'] as $key => $interval)
                                         <div class="custom-control custom-radio mb-3">
-                                            <input name="hora_cita" value="{{ $interval['start'] }}" class="custom-control-input" id="intervalMorning{{ $key }}" type="radio" required>
+                                            <input
+                                                name="hora_cita"
+                                                value="{{ $interval['start'] }}"
+                                                class="custom-control-input"
+                                                id="intervalMorning{{ $key }}"
+                                                type="radio"
+                                            >
                                             <label class="custom-control-label" for="intervalMorning{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
                                         </div>
                                     @endforeach
 
                                     @foreach ($intervals['tarde'] as $key => $interval)
                                         <div class="custom-control custom-radio mb-3">
-                                            <input name="hora_cita" value="{{ $interval['start'] }}" class="custom-control-input" id="intervalAfternoon{{ $key }}" type="radio" required>
+                                            <input
+                                                name="hora_cita"
+                                                value="{{ $interval['start'] }}"
+                                                class="custom-control-input"
+                                                id="intervalAfternoon{{ $key }}"
+                                                type="radio"
+                                            >
                                             <label class="custom-control-label" for="intervalAfternoon{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
                                         </div>
                                     @endforeach

@@ -15,7 +15,7 @@ class CreateHorariosTable extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clinica_id')->constrained('clinicas');
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedSmallInteger('dia_semana');
             $table->boolean('estado')->default(false);
 

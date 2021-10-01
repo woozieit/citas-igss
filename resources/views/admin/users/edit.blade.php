@@ -107,6 +107,41 @@
                             </div>
                         </div>
 
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Contraseña</label>
+                                <input
+                                    type="password"
+                                    class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                    name="password"
+                                    value="{{ old('password') ?? old('password') }}"
+                                    minlength="6"
+                                >
+
+                                @if ($errors->has('password'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('password') }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Confirmar Contraseña</label>
+                                <input
+                                    type="password"
+                                    class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                    name="password_confirmation"
+                                    minlength="6"
+                                >
+
+                                @if ($errors->has('password'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('password') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Dirección</label>
                             <textarea class="form-control" name="direccion" rows="5">{{ old('direccion') ? old('direccion') : $user->direccion }}</textarea>

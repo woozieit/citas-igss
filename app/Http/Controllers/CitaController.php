@@ -91,7 +91,7 @@ class CitaController extends Controller
             }
 
             if ( !$scheduleService->isAvailableInterval($fecha, $clinica_id, $start) ) {
-                $validator->errors()->add('available_time', 'La hora seleccionada ya se encuentra reservada por otro paciente.');
+                $validator->errors()->add('available_time', 'La hora seleccionada ya se encuentra reservada por otro afiliado.');
             }
         });
 
@@ -111,6 +111,12 @@ class CitaController extends Controller
             $data['afiliado_id'] = $request->afiliado_id;
         } else {
             $data['afiliado_id'] = auth()->id();
+        }
+
+        $validCitaDay = Cita::where('afiliado_id', $data['afiliado_id'])->where('fecha_cita', $request->fecha_cita)->first();
+
+        if ( $validCitaDay ) {
+            return back()->withErrors(array('El afiliado ya tiene una cita en la fecha seleccionada'));
         }
 
         $data['created_by'] = auth()->id();
@@ -143,9 +149,16 @@ class CitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, ScheduleServiceInterface $scheduleService)
     {
-        //
+        $cita = Cita::findOrFail($id);
+        $afiliados = User::Afiliados()->get();
+        $clinicas = Clinica::where('estado', true)->get();
+        $role = auth()->user()->rol;
+
+        $intervals = $scheduleService->getAvailableIntervals( $cita->fecha_cita, $cita->clinica_id );
+
+        return view('admin.citas.edit', compact('afiliados', 'clinicas', 'role', 'intervals', 'cita'));
     }
 
     /**
@@ -155,9 +168,76 @@ class CitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, ScheduleServiceInterface $scheduleService)
     {
-        //
+        $role = auth()->user()->rol;
+
+        if ( $role == 'admin' ) {
+            $rules = [
+                'clinica_id'=>'exists:clinicas,id',
+                'afiliado_id'=>'exists:users,id',
+            ];
+        } else {
+            $rules = [
+                'clinica_id'=>'exists:clinicas,id',
+            ];
+        }
+
+        $messages = [
+            'hora_cita.required' => 'Por favor seleccione una hora válida para su cita'
+        ];
+
+        $validator = Validator::make( $request->all(), $rules, $messages );
+
+        $cita = Cita::find($id);
+
+        $validator->after( function ( $validator ) use ( $request, $scheduleService, $cita ) {
+
+            $fecha = $request->fecha_cita;
+            $clinica_id = $request->clinica_id;
+            $hora_cita = !empty($request->hora_cita) ? $request->hora_cita : $cita->hora_cita;
+
+            if ( $fecha && $clinica_id && $hora_cita ) {
+                $start = new Carbon( $hora_cita );
+            } else {
+                return;
+            }
+
+            if ( !$scheduleService->isAvailableInterval($fecha, $clinica_id, $start) ) {
+                $validator->errors()->add('available_time', 'La hora seleccionada ya se encuentra reservada por otro afiliado.');
+            }
+        });
+
+        if ( $validator->fails() ) {
+            return back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        $data = $request->only([
+            'clinica_id',
+            'fecha_cita',
+            'hora_cita'
+        ]);
+
+        if ( $role === 'Admin' ) {
+            $data['afiliado_id'] = $request->afiliado_id;
+        } else {
+            $data['afiliado_id'] = auth()->id();
+        }
+
+        $validCitaDay = Cita::where('afiliado_id', $data['afiliado_id'])->where('fecha_cita', $request->fecha_cita)->first();
+
+        if ( $validCitaDay ) {
+            return back()->withErrors(array('El afiliado ya tiene una cita en la fecha seleccionada'));
+        }
+
+        $carbonTime = Carbon::createFromFormat( 'g:i A', $data['hora_cita'] );
+        $data['hora_cita'] = $carbonTime->format('H:i:s');
+
+        $cita->update($data);
+
+        return Redirect::route('citas.index')->withSuccess('Registro actualizado con éxito.');
     }
 
     /**
