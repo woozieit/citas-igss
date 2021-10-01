@@ -22,14 +22,14 @@ class ScheduleService implements ScheduleServiceInterface
     public function getAvailableIntervals($date, $clinica_id)
     {
         $horario = Horario::where('estado', true)
-                    ->where('dia_semana', $this->getDayFromDate($date))
-                    ->where('clinica_id', $clinica_id)
-                    ->first([
-                        'manana_inicio',
-                        'manana_fin',
-                        'tarde_inicio',
-                        'tarde_fin',
-                    ]);
+                        ->where('dia_semana', $this->getDayFromDate($date))
+                        ->where('clinica_id', $clinica_id)
+                        ->first([
+                            'manana_inicio',
+                            'manana_fin',
+                            'tarde_inicio',
+                            'tarde_fin',
+                        ]);
 
         if ( $horario ) {
 

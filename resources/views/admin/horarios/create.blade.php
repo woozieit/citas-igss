@@ -166,6 +166,7 @@
 
                         <div class="mt-5">
                             <button type="submit" class="btn btn-primary">Registrar</button>
+                            <a href="{{ route('clinicas.index') }}" class="btn btn-secondary ml-3">Regresar</a>
                         </div>
                     </form>
 

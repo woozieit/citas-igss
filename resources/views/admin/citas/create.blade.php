@@ -36,7 +36,6 @@
                                 <select
                                     class="form-control select2 {{ $errors->has('afiliado_id') ? 'is-invalid' : '' }}"
                                     name="afiliado_id"
-                                    value="{{ old('afiliado_id') ?? old('afiliado_id') }}"
                                     required
                                 >
                                     <option selected disabled>--Seleccione--</option>
@@ -114,7 +113,11 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Registrar</button>
+                        <div class="mt-5">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <a href="{{ route('citas.index') }}" class="btn btn-secondary ml-3">Regresar</a>
+                        </div>
+
                     </form>
 
                 </div>

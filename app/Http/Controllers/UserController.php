@@ -43,12 +43,13 @@ class UserController extends Controller
             'dpi' => 'required|min:13|max:13|unique:users',
             'correo' => 'required|email|unique:users',
             'rol' => 'required',
-            'telefono' => 'nullable|min:8|max:8'
+            'telefono' => 'nullable|min:8|max:8',
+            'password' => 'required|min:6'
         ]);
 
         $input = $request->all();
 
-        $input['password'] = bcrypt(123456);
+        $input['password'] = bcrypt($request->password);
         $input['acreditacion'] = true;
 
         $user = new User;
@@ -97,7 +98,8 @@ class UserController extends Controller
             'dpi' => 'required|min:13|max:13|unique:users,dpi,' . $id,
             'correo' => 'required|email|unique:users,correo,' . $id,
             'rol' => 'required',
-            'telefono' => 'nullable|min:8|max:8'
+            'telefono' => 'nullable|min:8|max:8',
+            'password' => 'nullable|min:6|confirmed'
         ]);
 
         $input = $request->all();
@@ -105,6 +107,9 @@ class UserController extends Controller
         $input['acreditacion'] = $request->acreditacion === 'on' ? true : false;
 
         $user = User::find($id);
+
+        $input['password'] = !empty($request->password) ? bcrypt($request->password) : $user->password;
+
         $user->update( $input );
 
         return Redirect::route('usuarios.index')->withSuccess('Registro actualizado con éxito.');

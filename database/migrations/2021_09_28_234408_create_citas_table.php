@@ -15,9 +15,9 @@ class CreateCitasTable extends Migration
     {
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('afiliado_id')->constrained('users');
-            $table->foreignId('clinica_id')->constrained('clinicas');
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('afiliado_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->date('fecha_cita');
             $table->time('hora_cita');

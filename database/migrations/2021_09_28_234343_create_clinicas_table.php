@@ -17,7 +17,7 @@ class CreateClinicasTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->boolean('estado')->default(true);
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
